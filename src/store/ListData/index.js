@@ -18,13 +18,14 @@ const mutations = {
         state.KoreaData = val.slice(0, 6)
     },
     GETMOREMUSIC(state, val) {
-        state.moreList = val.slice(0, 30)
+        // console.log(val);
+        state.moreList = val.data.slice(0, 20 * val.num)
     }
 }
 const actions = {
     async getChinaData(context, val) {
         let res = await getMusicList(7);
-        // console.log(res.result);
+        // console.log(res);
         context.commit('GETCHINADATA', res.data)
     },
     async getForignData(context, val) {
@@ -38,9 +39,10 @@ const actions = {
         context.commit('GETKOREADATA', res.data)
     },
     // 判断是否是第一次
-    async getMoreData(context, val,) {
-        let res = await getMusicList(val);
-        context.commit('GETMOREMUSIC', res.data)
+    async getMoreData(context, val) {
+        // console.log(val);
+        let res = await getMusicList(val.type);
+        context.commit('GETMOREMUSIC', { data: res.data, num: val.num })
     },
 }
 

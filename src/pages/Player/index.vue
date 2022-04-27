@@ -17,6 +17,11 @@
     <div class="song-info">
       <div class="song-info-img">
         <img :src="currentMusic.album.picUrl" alt />
+        <lrc
+          :musicLrc="musicLrc ? musicLrc : {}"
+          :currentTime="currentTime"
+          :duration="duration"
+        />
       </div>
       <div class="iconbox">
         <i class="iconfont icon-fabulous left"></i>
@@ -32,13 +37,38 @@
 
 <script>
 import { mapState } from "vuex";
+// import lrc from "./LRC";
+const lrc = () => import(/* webpackChunkName: "LRC" */ "./LRC");
 export default {
   name: "player",
+  data() {
+    return {
+      currentTime: 0,
+      duration: 0,
+    };
+  },
   created() {
     this.$store.dispatch("musicDetail/getMusicDetail", this.$route.params.id);
+    this.$store.dispatch("musicDetail/getMusicLrc", this.$route.params.id);
+  },
+  mounted() {
+    this.listener();
   },
   computed: {
-    ...mapState("musicDetail", ["musicDetail", "currentMusic"]),
+    ...mapState("musicDetail", ["musicDetail", "currentMusic", "musicLrc"]),
+  },
+  components: { lrc },
+  methods: {
+    listener() {
+      this.$refs.player.addEventListener("timeupdate", () => {
+        this.currentTime = this.$refs.player.currentTime;
+        // console.log(this.$refs.player.currentTime);
+      });
+      this.$refs.player.addEventListener("canplay", () => {
+        this.duration = this.$refs.player.duration;
+        // console.log(this.$refs.player.duration);
+      });
+    },
   },
 };
 </script>

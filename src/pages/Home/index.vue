@@ -8,7 +8,9 @@
 
 <script>
 import { mapState } from "vuex";
-import musiclist from "./MusicList";
+// import musiclist from "@/components/MusicList";
+const musiclist = () =>
+  import(/* webpackChunkName: "MusicList" */ "@/components/MusicList");
 export default {
   name: "home",
   components: {

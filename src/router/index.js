@@ -1,12 +1,6 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 
-import Layout from '@/pages/Layout'
-import Home from '@/pages/Home'
-import Mine from '@/pages/Mine'
-import Search from '@/pages/Search'
-import Top from '@/pages/Top'
-
 Vue.use(VueRouter)
 
 export default new VueRouter({
@@ -14,23 +8,23 @@ export default new VueRouter({
         // 利用二级路由，设置4个组件共用导航头
         {
             path: '/',
-            component: Layout,
+            component: () => import(/* webpackChunkName: "nav" */ `@/pages/Layout`),
             children: [
                 {
                     path: '/',
-                    component: Home
+                    component: () => import(/* webpackChunkName: "Home" */ `@/pages/Home`)
                 },
                 {
                     path: '/mine',
-                    component: Mine
+                    component: () => import(/* webpackChunkName: "group-other" */ `@/pages/Mine`)
                 },
                 {
                     path: '/search',
-                    component: Search
+                    component: () => import(/* webpackChunkName: "group-other" */ `@/pages/Search`)
                 },
                 {
                     path: '/top',
-                    component: Top
+                    component: () => import(/* webpackChunkName: "group-other" */ `@/pages/Top`)
                 },
             ]
         },
@@ -38,12 +32,12 @@ export default new VueRouter({
         {
             path: '/more/:type',
             name: 'more',
-            component: () => import('@/pages/Home/MusicMore')
+            component: () => import(/* webpackChunkName: "More" */ `@/pages/More`)
         },
         {
             path: '/player/:id',
             name: 'player',
-            component: () => import('@/pages/Player')
+            component: () => import(/* webpackChunkName: "Player" */ `@/pages/Player`)
         }
 
     ],
